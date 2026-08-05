@@ -6,8 +6,9 @@ RAG 智能文档问答系统 — Gradio Web 界面
 import os
 import glob
 
-# 使用 HuggingFace 国内镜像
-os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')
+# HuggingFace 镜像（仅在国内环境使用，Render 在美国直连即可）
+if os.getenv('USE_MIRROR', '0') == '1':
+    os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')
 
 import gradio as gr
 

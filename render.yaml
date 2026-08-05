@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: rag-qa-system
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: PORT
+        value: 7860
