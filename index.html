@@ -85,7 +85,7 @@ footer { text-align:center; color:#3d5164; font-size:11px; font-family:var(--mon
   <div class="sub">对下方 8 个文档块提问——看哪些块被检索命中、相似度多少、答案引用了谁</div>
   <div class="box">
     <div class="q-row">
-      <input id="q" placeholder="问一个关于文档库的问题……" value="积分面板是什么，数据存在哪里？">
+      <input id="q" placeholder="问一个关于文档库的问题……" value="笔记数据存储在哪里？">
       <button class="go-btn" id="go">检索 →</button>
     </div>
     <div class="samples" id="samples"></div>
@@ -108,16 +108,16 @@ footer { text-align:center; color:#3d5164; font-size:11px; font-family:var(--mon
 <footer>RAG DEMO · 检索真计算 · 生成示例回放 · 完整版见仓库</footer>
 
 <script>
-/* ============ 文档库（8 块，南浊生态真实内容） ============ */
+/* ============ 文档库（8 块，虚构演示内容：星屿科技） ============ */
 const CHUNKS = [
-  { id:'CH-01', doc:'agent-world 概览.md', text:'agent-world 是让 AI Agent 自主游玩的数字世界框架。架构以 HTTP API 为核心，MCP 降级为适配层。部署在 189.24.78.157 服务器，Docker 容器运行，含双世界加载、API/WS/MCP 全接口。' },
-  { id:'CH-02', doc:'积分面板 README.md', text:'智谱积分悬浮面板 zhipu-points-tracker：积分看板+桌面悬浮窗，每晚看消耗记账。含 GitHub 风热力图、五指标统计、Top5 烧钱对话。server 端 worker 常驻 systemd，面板部署在 reeve10001.top/points/。' },
-  { id:'CH-03', doc:'积分面板数据说明.md', text:'积分明细数据存储在服务器 /opt/points 目录，worker 每日增量拉取。备份脚本 backup.sh 每日打包 points-*.tar.gz，保留 14 份。Electron 悬浮窗本地另有副本。' },
-  { id:'CH-04', doc:'知识库架构.md', text:'个人知识库：GitHub 私有仓 CHristianREEVEE/knowledge-base 存 markdown，展示页 docs/index.html 双通道——GitHub Pages 与服务器镜像 kb.reeve10001.top 同步直出。含 3D 银河大脑视图。' },
-  { id:'CH-05', doc:'考研计划.md', text:'2026 考研主线：南大图情 MLIS 专硕，199 管综+英二，目标总分 245-250。三阶段 90 天计划：零件拆解、整卷攻坚、弹药封装。学习系统搭在 Gemini Notebook。' },
-  { id:'CH-06', doc:'晨检制度.md', text:'每日 08:30 微信晨检：检查世界备份、GitHub 备份链、知识库 commit、积分面板 worker、基础设施指纹比对，全绿一行汇报，异常发警报。' },
-  { id:'CH-07', doc:'双模型对比法.md', text:'双模型同题对比法：同一需求分别喂 Gemini 和 GLM，产物各开 GitHub Pages 并排比较，作为评价模型性价比的最小方法论。代表作：鹈鹕骑行双版本。' },
-  { id:'CH-08', doc:'demo 合集站.md', text:'demo.reeve10001.top 是纯外链地址卡合集站：只存地址、不跳转、不挂后缀。每张卡片标注 DEMO 编号、项目简介与标签，随做随放。' },
+  { id:'CH-01', doc:'产品概览.md', text:'星屿笔记是一款团队协作云笔记产品，主打多端同步与块级编辑。核心架构以 REST API 为中心，客户端与消息队列解耦。服务部署在云服务器集群，容器化运行，含灰度发布、API 与消息推送全链路。' },
+  { id:'CH-02', doc:'团队手册.md', text:'星屿科技团队手册：新成员入职指南、代码规范与评审流程。工程师按特性小队组织，每个小队负责一个产品域。每季度举行一次全员技术开放日，展示各队 demo。' },
+  { id:'CH-03', doc:'数据存储说明.md', text:'笔记数据存储在对象存储与数据库分片集群，写入走异步队列每日增量归档。备份服务每日打包加密快照，保留 14 份滚动窗口。桌面客户端本地另有缓存副本。' },
+  { id:'CH-04', doc:'部署架构.md', text:'生产部署采用蓝绿发布：流量入口走网关集群，应用层多可用区容器编排，数据库主从+异地容灾。发布前所有变更必须通过验收测试脚本，发布后观察一小时核心指标。' },
+  { id:'CH-05', doc:'季度 OKR.md', text:'本季度团队 OKR：编辑器性能优化首字节耗时下降 30%，协作冲突率下降一半，移动端离线模式全量上线。里程碑分三阶段：技术预研、灰度放量、全量发布。' },
+  { id:'CH-06', doc:'值班制度.md', text:'每日值班检查：备份任务状态、发布流水线、核心接口成功率、容器健康度与配置指纹比对，全部正常一行汇报，异常立即升级到值班经理并拉群处置。' },
+  { id:'CH-07', doc:'方案评审方法.md', text:'双盲评审方法：同一技术方案匿名分发给两位架构师独立评审，结论并排对比，作为技术决策的最小方法论。历史实践中多数方案能快速收敛共识。' },
+  { id:'CH-08', doc:'demo 展示墙.md', text:'demo.wall 是团队作品展示墙：纯外链地址卡合集，只存地址、不跳转、不挂统计脚本。每张卡片标注编号、项目简介与技术标签，随做随放。' },
 ];
 const CITE_ANSWER = {
   default: (top) => `根据检索到的 ${top.map(c=>c.id).join('、')} 号文档块：**${top[0].doc.split('.')[0]}** 中提到——${top[0].text.split('。')[0]}。${top[1] ? '另外 **' + top[1].doc.split('.')[0] + '** 补充：' + top[1].text.split('。')[0] + '。' : ''}`,
@@ -163,7 +163,7 @@ function run() {
 
 $('go').addEventListener('click', run);
 $('q').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
-const SAMPLES = ['积分面板是什么，数据存在哪里？', '考研的目标分数和计划是什么？', '双模型对比法是怎么比出模型好坏的？', '知识库的展示页部署在哪？'];
+const SAMPLES = ['笔记数据存储在哪里？', '发布前要做什么检查？', '方案评审方法是怎么做的？', '本季度的目标是什么？'];
 $('samples').innerHTML = SAMPLES.map((s,i)=>`<button data-i="${i}">${s.slice(0,16)}${s.length>16?'…':''}</button>`).join('');
 $('samples').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
